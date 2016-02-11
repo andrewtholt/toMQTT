@@ -27,22 +27,40 @@ end
 function save(t)
     local x=0
     print("Save")
+    
+    local loc=t["SAVETO"]
+    if loc = nil then
+      loc = "/tmp"
+    end
 
-    local fname="/tmp/" .. t["NODE"] .. ".rc"
+    local fname=loc .. "/" .. t["NODE"] .. ".rc"
     local file=io.open(fname,"w")
 
+    print("... to file " .. fname)
+    
     for k,v in pairs(t) do
-        file:write("^set " .. k .. ' "' .. v .. '"\n')
+        file:write("^set " .. k .. ' "' .. v.valu^exit .. '"\n')
     end
 
     file:flush()
     io.close(file)
 end
 
+function subscribe(pList, topic)
+  print("Subscribe\n")
+  
+  if string.sub(topic,1,1) == "/" then
+
+  end
+
+  table.insert(pList, topic)
+end
+
 function main()
     param={}
     local runFlag=true
     local fileFlag = false
+    local subList = {}
     
     param["DEBUG"] = "FALSE"
     param["NODE"] = "TEST"
@@ -59,10 +77,6 @@ function main()
                 io.input(io.stdin)
                 fileFlag=false
                 line="^nop"
---                print(line)
---                os.exit()
---            else
---                print(line)
             end
         else
             io.write("> ")
@@ -70,14 +84,15 @@ function main()
         end
 
 
---        print(line)
---        print("=========")
 
         if line ~= nil then
             if line == "^exit" then
                 runFlag=false
             else
                 local cmd = line:split(" ")
+                if cmd[1] == "^subscribe" then
+                  subscribe(subList,cmd[2])
+                end
 
                 if cmd[1] == "^nop" then
                 end

@@ -1,0 +1,4 @@
+^set SAVETO "."
+^set ROOT "/home/livingRoom/temperature"
+^set DEBUG "FALSE"
+^set NODE "localhost"
