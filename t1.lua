@@ -63,7 +63,7 @@ function main()
             end
 
             if cmd[1] == "^unlock" then
-                p:unlock( cmd[2])
+--                p:unlock( cmd[2])
             end
 
             if cmd[1] == "^save" then
