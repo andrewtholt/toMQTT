@@ -17,6 +17,18 @@ function string:split( inSplitPattern, outResults )
     return outResults
 end
 
+function configured(p, s )
+    p:unlock("CONFIGURED")
+
+    if s then
+        p:set("CONFIGURED","TRUE")
+    else
+        p:set("CONFIGURED","FALSE")
+    end
+
+    p:lock("CONFIGURED")
+end
+
 function main()
     local fileFlag=false
 
@@ -27,6 +39,10 @@ function main()
     p:set("SAVETO","/tmp")
     p:set("DEBUG","FALSE")
     p:set("RUNFLAG","TRUE")
+    p:lock("RUNFLAG")
+
+    p:set("CONFIGURED","FALSE")
+    p:lock("CONFIGURED")
 
     p:dump()
 
@@ -39,6 +55,7 @@ function main()
                 io.input(io.stdin)
                 fileFlag=false
                 line="^eof"
+                configured(p,true)
             end
         else
             io.write("-> ");
@@ -46,17 +63,18 @@ function main()
         end
 
         if line == "^exit" then
+            p:unlock("RUNFLAG")
             p:set("RUNFLAG","FALSE")
         else
             local cmd = line:split(" ")
-            
+
             if cmd[1] == "^get" then  
-              local t1 = p:get(cmd[2])
-              if t1 ~= false then
-                io.write(t1 .. "\n")  
-              end
+                local t1 = p:get(cmd[2])
+                if t1 ~= false then
+                    io.write(t1 .. "\n")  
+                end
             end
-            
+
 
             if cmd[1] == "^dump" then
                 p:dump()
@@ -64,6 +82,7 @@ function main()
 
             if cmd[1] == "^set" then
                 p:set( cmd[2], cmd[3], false)
+                configured(p,false)
             end
 
             if cmd[1] == "^lock" then
@@ -71,15 +90,17 @@ function main()
             end
 
             if cmd[1] == "^unlock" then
---                p:unlock( cmd[2])
+                --                p:unlock( cmd[2])
             end
 
             if cmd[1] == "^save" then
                 p:save()
+                configured(p,true)
             end
 
             if cmd[1] == "^sub" then
                 p:subscribe(cmd[2])
+                configured(p,false)
             end
 
             if cmd[1] == "^connect" then

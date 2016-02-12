@@ -2,12 +2,28 @@ class = require("30log")
 
 local M = class("Test")
 
+-- function M:unlock(name)
+--   local t=self.p[name]
+--   
+--   if t ~= nil then
+--     t.lock = false
+--   end
 
 function M:init()
   print("Init")
   self.p = {}
   self.sub = {}
   self.p["DEBUG"] = "FALSE"
+
+  self.p["WHATAMI"]= { value="", lock=true }
+
+  if node == nil then
+      self.p["WHATAMI"].value = "HOST"
+  else
+      self.p["WHATAMI"].value = "NODEMCU"
+  end
+
+  self.p["WHATAMI"].lock=true
 end
 
 function M:dump()
