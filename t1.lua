@@ -49,6 +49,14 @@ function main()
             p:set("RUNFLAG","FALSE")
         else
             local cmd = line:split(" ")
+            
+            if cmd[1] == "^get" then  
+              local t1 = p:get(cmd[2])
+              if t1 ~= false then
+                io.write(t1 .. "\n")  
+              end
+            end
+            
 
             if cmd[1] == "^dump" then
                 p:dump()

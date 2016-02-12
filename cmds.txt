@@ -3,6 +3,10 @@ Command: ^dump
 Description:
     Display the parameters and the topics subscribed.
 
+Command: ^get
+Description:
+    Return a paramaters value.
+
 Command: ^set
 Description:
     Set a parameter to a value
