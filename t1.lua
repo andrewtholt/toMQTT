@@ -17,6 +17,14 @@ function string:split( inSplitPattern, outResults )
     return outResults
 end
 
+local function exists(name)
+    if type(name) ~= "string" then
+        return false
+    end
+
+    return os.rename(name,name)
+end
+
 function configured(p, s )
     p:unlock("CONFIGURED")
 
@@ -104,6 +112,11 @@ function main()
                 configured(p,false)
             end
 
+            if cmd[1] == "^pub" then
+                p:publish( cmd[2], cmd[3])
+            end
+
+
             if cmd[1] == "^connect" then
                 p:connect()
             end
@@ -112,12 +125,16 @@ function main()
             -- ^load must be last.
             --
             if cmd[1] == "^load" then
-                fileFlag=true
                 local fname = p:get("SAVETO")
                 fname = fname .. "/"
                 fname = fname .. p:get("NODE") .. ".rc"
                 print("fname",fname)
-                io.input(fname)
+                if exists(fname) then
+                    fileFlag=true
+                    io.input(fname)
+                else
+                    print("File " .. fname .. " Does not exist");
+                end
             end
         end
     end
