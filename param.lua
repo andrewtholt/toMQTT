@@ -185,7 +185,27 @@ function M:connect()
     return false
   end
   local server = t.value
-  
+  local tmp = self.p["MQTT_PORT"]
+
+  if tmp == nil then
+    print("ERR:NO PORT")
+    return false
+  end
+
+  local port=tonumber( tmp.value )
+
+  if port == nil then
+    print("ERR:BAD PORT")
+    return false
+  end
+
+  if self.p["WHATAMI"].value == "HOST" then
+      --
+      -- Load OS MQTT lib
+      --
+      MQTT = require("mqtt_library")
+  end
+  return true
 end
 
 

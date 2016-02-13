@@ -38,6 +38,7 @@ function main()
     p:set("NODE","localhost")
     p:set("SAVETO","/tmp")
     p:set("DEBUG","FALSE")
+    p:set("MQTT_PORT","1883")
     p:set("RUNFLAG","TRUE")
     p:lock("RUNFLAG")
 
