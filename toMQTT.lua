@@ -29,7 +29,7 @@ function save(t)
     print("Save")
     
     local loc=t["SAVETO"]
-    if loc = nil then
+    if loc == nil then
       loc = "/tmp"
     end
 
